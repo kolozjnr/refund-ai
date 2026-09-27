@@ -1,4 +1,4 @@
-﻿# WORKNOON Refund Support
+﻿# Refund Support
 
 A small Laravel, Vue, Inertia, and PostgreSQL app for customer refund requests. Gemini classifies requests first, with OpenRouter as a fallback; deterministic server-side policy and decision services remain authoritative.
 
@@ -42,7 +42,7 @@ If Gemini is unavailable, OpenRouter is tried. If both are unavailable, submissi
 
 ## Docker
 
-With Docker Compose available, set `APP_KEY` and optionally `GERMINI_API_KEY` in your environment, then run:
+With Docker Compose available, set `APP_KEY` and optionally `GERMINI_API_KEY, GERMINI_MODEL, OPEN_ROUTER_API_KEY` in your environment, then run:
 
 ```sh
 docker compose up --build
@@ -77,9 +77,11 @@ Visit `/admin/refunds`, then select a request for order facts, customer message,
 
 ## Assumptions and trade-offs
 
-- Laravel 12, Vue 3, Inertia, and PostgreSQL fit the existing Laravel app and requested stack.
-- Gemini is called directly over Laravel's HTTP client to avoid an unnecessary AI framework dependency.
+- Laravel 12, Vue 3, Inertia, and PostgreSQL fit the solution.
+- Gemini and OpenRouter is called directly over Laravel's HTTP client to avoid an unnecessary AI framework dependency.
 - `GERMINI_API_KEY` feeds the existing `services.germini.key` setting; the spelling is retained for compatibility.
+
+- `OPEN_ROUTER_API_KEY` feeds the existing `services.openrouter.key` setting; the spelling is retained for compatibility.
 - Seeded orders include one scenario each for the assessment rules; scenario order IDs are generated from stable names.
-- Support routes are unauthenticated demo routes because this skeleton has no auth system. Add staff policies and customer authentication before production use.
+- Support routes are unauthenticated demo routes this are intentional because auth system was not eplixitly mentioned. Add staff policies and customer authentication before production use.
 - Refund decisions are recorded only; no payment processor or money movement is connected.

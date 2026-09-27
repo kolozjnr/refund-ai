@@ -20,10 +20,20 @@ function submit() { form.post('/refunds'); }
     </section>
     <form @submit.prevent="submit" class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-7">
       <h2 class="text-xl font-semibold">Start a refund request</h2><p class="mt-1 text-sm text-stone-500">A few details help us review this quickly.</p>
-      <label class="mt-6 block text-sm font-medium">Customer<select v-model="form.customer_id" @change="changeCustomer" class="mt-2 w-full rounded-lg border-stone-300 bg-white text-sm"><option value="">Select a customer</option><option v-for="c in customers" :key="c.id" :value="c.id">{{ c.name }} · {{ c.email }}</option></select></label><p v-if="form.errors.customer_id" class="mt-1 text-xs text-red-600">{{ form.errors.customer_id }}</p>
-      <label class="mt-5 block text-sm font-medium">Order<select v-model="form.order_id" :disabled="!customer" class="mt-2 w-full rounded-lg border-stone-300 bg-white text-sm disabled:bg-stone-100"><option value="">{{ customer ? 'Select an order' : 'Select a customer first' }}</option><option v-for="o in orders" :key="o.id" :value="o.id">{{ o.order_number }} · {{ new Date(o.order_date).toLocaleDateString() }} · {{ o.currency }} {{ Number(o.total_amount).toFixed(2) }}</option></select></label>
+      <label class="mt-6 block text-sm font-medium">Customer
+        <select v-model="form.customer_id" @change="changeCustomer" class="mt-2 w-full rounded-lg border-stone-300 bg-white text-sm"><option value="">Select a customer</option><option v-for="c in customers" :key="c.id" :value="c.id">{{ c.name }} · {{ c.email }}</option>
+        </select>
+      </label>
+
+      <p v-if="form.errors.customer_id" class="mt-1 text-xs text-red-600">{{ form.errors.customer_id }}</p>
+      <label class="mt-5 block text-sm font-medium">Order
+        <select v-model="form.order_id" :disabled="!customer" class="mt-2 w-full rounded-lg border-stone-300 bg-white text-sm disabled:bg-stone-100"><option value="">{{ customer ? 'Select an order' : 'Select a customer first' }}</option><option v-for="o in orders" :key="o.id" :value="o.id">{{ o.order_number }} · {{ new Date(o.order_date).toLocaleDateString() }} · {{ o.currency }} {{ Number(o.total_amount).toFixed(2) }}</option>
+        </select>
+      </label>
       <div v-if="order" class="mt-3 rounded-lg bg-stone-50 p-3 text-xs text-stone-600"><p class="font-semibold text-stone-800">{{ order.status }} · {{ order.items.map(i => i.product_name).join(', ') }}</p><p class="mt-1">{{ order.items.some(i => i.final_sale) ? 'Includes a final-sale item' : 'Standard return policy applies' }}</p></div>
-      <label class="mt-5 block text-sm font-medium">What happened?<textarea v-model="form.message" rows="5" maxlength="3000" placeholder="My headphones arrived damaged and I would like a refund." class="mt-2 w-full resize-y rounded-lg border-stone-300 text-sm placeholder:text-stone-400 focus:border-amber-500 focus:ring-amber-500"></textarea></label><p v-if="form.errors.message" class="mt-1 text-xs text-red-600">{{ form.errors.message }}</p>
+      <label class="mt-5 block text-sm font-medium">What happened?
+        <textarea v-model="form.message" rows="5" maxlength="3000" placeholder="My headphones arrived damaged and I would like a refund." class="mt-2 w-full resize-y rounded-lg border-stone-300 text-sm placeholder:text-stone-400 focus:border-amber-500 focus:ring-amber-500"></textarea>
+      </label><p v-if="form.errors.message" class="mt-1 text-xs text-red-600">{{ form.errors.message }}</p>
       <label class="mt-4 block text-sm font-medium">Requested amount <span class="font-normal text-stone-400">(optional)</span><div class="mt-2 flex items-center rounded-lg border border-stone-300 px-3"><span class="text-stone-400">$</span><input v-model="form.requested_amount" type="number" min="0.01" step="0.01" placeholder="Full order amount" class="w-full border-0 text-sm focus:ring-0"></div></label>
       <button :disabled="form.processing" class="mt-6 w-full rounded-lg bg-stone-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-stone-700 disabled:cursor-wait disabled:opacity-60">{{ form.processing ? 'Reviewing your request…' : 'Submit refund request' }}</button>
       <p class="mt-3 text-center text-xs text-stone-400">Your information is used only to review this request.</p>
